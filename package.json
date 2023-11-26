@@ -13,6 +13,7 @@
     "gulp-concat": "^2.6.1"
   },
   "dependencies": {
-    "gulp-sass": "^5.1.0"
+    "gulp-sass": "^5.1.0",
+    "gulp-uglify-es": "^3.0.0"
   }
 }
