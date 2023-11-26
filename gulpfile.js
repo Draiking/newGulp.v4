@@ -13,11 +13,20 @@ const newer = require('gulp-newer');
 const svgSprite = require('gulp-svg-sprite');
 const ttf2woff2 = require('gulp-ttf2woff2');
 const fonter = require('gulp-fonter');
-const include = require('gulp-include')
+const include = require('gulp-include');
 
 function html() {
   return src('src/index.html')
     .pipe(dest('build'))
+}
+
+function pages() {
+  return src('src/*.html')
+    .pipe(include({
+      includePaths: 'src/pages'
+    }))
+    .pipe(dest('build'))
+    .pipe(browserSync.stream())
 }
 
 function style() {
@@ -62,7 +71,7 @@ function images() {
     .pipe(dest('build/images'))
 }
 
-function () {
+function svg() {
   return src(['src/images/*.svg'])
     .pipe(svgSprite({
       mode: {
@@ -78,13 +87,14 @@ function () {
 function watching () {
   browserSync.init({
     server: {
-      baseDir: "src/"
+      baseDir: "build/"
     }
   });
   watch(['src/style/style.scss'], style);
   watch(['src/images/'], images);
   watch(['src/js/index.js'], scripts);
-  watch(['src/**/*.html']).on('change', browserSync.reload)
+  watch(['src/pages/*', 'src/*.html'], pages);
+  watch(['src/*.html']).on('change', browserSync.reload)
 }
 
 function cleanDist() {
@@ -95,10 +105,12 @@ function cleanDist() {
 
 exports.html = html;
 exports.images = images;
+exports.svg = svg;
 exports.fonts = fonts;
 exports.style = style;
 exports.scripts = scripts;
 exports.watching = watching;
+exports.pages = pages;
 
 exports.clean = cleanDist 
-exports.default = parallel(html,style,scripts,watching);
+exports.default = parallel(html,style,scripts,pages,watching);
