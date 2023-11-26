@@ -12,6 +12,14 @@ function style() {
     .pipe(dest('build/css'))
 }
 
+function scripts() {
+  return src('src/js/index.js')
+    .pipe(concat("index.js"))
+    .pipe(uglify())
+    .pipe(dest("build/js"))
+}
 
 
-exports.style = style
+
+exports.style = style;
+exports.scripts = scripts;
