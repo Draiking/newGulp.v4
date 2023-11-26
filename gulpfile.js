@@ -1,9 +1,11 @@
-const {src, dest, watch} = require('gulp');
+const {src, dest, watch, parallel} = require('gulp');
 
 const sсss = require('gulp-sass')(require('sass'));
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify-es').default;
 const browserSync = require('browser-sync').create();
+const autoprefixer = require 'gulp-autoprefixer';
+
 
 
 function style() {
@@ -23,14 +25,15 @@ function scripts() {
 }
 
 function watching () {
-  watch(['src/style/style.scss'], style)
-  watch(['src/js/index.js'], scripts)
+  watch(['src/style/style.scss'], style);
+  watch(['src/js/index.js'], scripts);
+  watch(['src/**/*.html']).on('change', browserSync.reload)
 }
 
 function browsersync() {
   browserSync.init({
     server: {
-      baseDir: "build/"
+      baseDir: "src/"
     }
   })
 }
@@ -41,3 +44,5 @@ exports.style = style;
 exports.scripts = scripts;
 exports.watching = watching;
 exports.browsersync = browsersync;
+
+exports.default = parallel(style,scripts,browsersync,watching);
