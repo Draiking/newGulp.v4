@@ -40,9 +40,10 @@ function browsersync() {
   })
 }
 
+exports.html = html;
 exports.style = style;
 exports.scripts = scripts;
 exports.watching = watching;
 exports.browsersync = browsersync;
 
-exports.default = parallel(style,scripts,browsersync,watching);
+exports.default = parallel(html,style,scripts,browsersync,watching);
