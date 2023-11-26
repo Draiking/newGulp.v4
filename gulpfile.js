@@ -4,12 +4,13 @@ const sсss = require('gulp-sass')(require('sass'));
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify-es').default;
 const browserSync = require('browser-sync').create();
-const autoprefixer = require 'gulp-autoprefixer';
+const autoprefixer = require ('gulp-autoprefixer');
 
 
 
 function style() {
   return src('src/style/style.scss')
+		.pipe(autoprefixer({overrideBrowsersList: ['last 10 version']}))
     .pipe(concat('style.min.css'))
     .pipe(sсss({outputStyle: 'compressed'}))
     .pipe(dest('build/css'))
