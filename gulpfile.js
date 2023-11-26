@@ -3,6 +3,7 @@ const {src, dest, watch} = require('gulp');
 const sсss = require('gulp-sass')(require('sass'));
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify-es').default;
+const browserSync = require('browser-sync').create();
 
 
 function style() {
@@ -10,6 +11,7 @@ function style() {
     .pipe(concat('style.min.css'))
     .pipe(sсss({outputStyle: 'compressed'}))
     .pipe(dest('build/css'))
+    .pipe(browserSync.stream())
 }
 
 function scripts() {
@@ -17,6 +19,7 @@ function scripts() {
     .pipe(concat("index.js"))
     .pipe(uglify())
     .pipe(dest("build/js"))
+    .pipe(browserSync.stream())
 }
 
 function watching () {
@@ -24,8 +27,17 @@ function watching () {
   watch(['src/js/index.js'], scripts)
 }
 
+function browsersync() {
+  browserSync.init({
+    server: {
+      baseDir: "build/"
+    }
+  })
+}
+
 
 
 exports.style = style;
 exports.scripts = scripts;
 exports.watching = watching;
+exports.browsersync = browsersync;
