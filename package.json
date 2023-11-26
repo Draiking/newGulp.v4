@@ -12,10 +12,11 @@
     "browser-sync": "^2.29.3",
     "gulp": "^4.0.2",
     "gulp-avif": "^1.1.1",
-    "gulp-cached": "^1.1.1",
     "gulp-clean": "^0.4.0",
     "gulp-concat": "^2.6.1",
     "gulp-imagemin": "^7.1.0",
+    "gulp-newer": "^1.4.0",
+    "gulp-svg-sprite": "^2.0.3",
     "gulp-webp": "^4.0.0",
     "sass": "^1.69.5"
   },

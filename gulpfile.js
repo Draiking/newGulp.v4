@@ -9,7 +9,8 @@ const clean = require('gulp-clean');
 const avif = require('gulp-avif');
 const webp = require('gulp-webp');
 const imagemin = require('gulp-imagemin');
-const cached = require('gulp-cached');
+const newer = require('gulp-newer');
+const svgSprite = require('gulp-svg-sprite');
 
 function html() {
   return src('src/index.html')
@@ -35,13 +36,29 @@ function scripts() {
 
 function images() {
   return src(['src/images/*.*', '!src/images/*.svg'])
+    .pipe(newer('build/images'))
     .pipe(avif({
       quality: 50
     }))
     .pipe(src('src/images/*.*'))
+    .pipe(newer('build/images'))
     .pipe(webp())
     .pipe(src('src/images/*.*'))
+    .pipe(newer('build/images'))
     .pipe(imagemin())
+    .pipe(dest('build/images'))
+}
+
+function () {
+  return src(['src/images/*.svg'])
+    .pipe(svgSprite({
+      mode: {
+        stack: {
+          sprite: '../sprite.svg',
+          example: true
+        }
+      }
+    }))
     .pipe(dest('build/images'))
 }
 
@@ -52,17 +69,9 @@ function watching () {
     }
   });
   watch(['src/style/style.scss'], style);
+  watch(['src/images/'], images);
   watch(['src/js/index.js'], scripts);
   watch(['src/**/*.html']).on('change', browserSync.reload)
-}
-
-function building () {
-  return src([
-    'src/style/style.scss',
-    'src/index.html',
-    'src/js/index.js',
-  ], {base: 'src'})
-    .pipe(dest('build'))
 }
 
 function cleanDist() {
@@ -77,5 +86,5 @@ exports.style = style;
 exports.scripts = scripts;
 exports.watching = watching;
 
-exports.build = series(cleanDist, building )
+exports.clean = cleanDist 
 exports.default = parallel(html,style,scripts,watching);
