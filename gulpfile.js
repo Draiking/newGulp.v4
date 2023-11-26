@@ -11,6 +11,9 @@ const webp = require('gulp-webp');
 const imagemin = require('gulp-imagemin');
 const newer = require('gulp-newer');
 const svgSprite = require('gulp-svg-sprite');
+const ttf2woff2 = require('gulp-ttf2woff2');
+const fonter = require('gulp-fonter');
+const include = require('gulp-include')
 
 function html() {
   return src('src/index.html')
@@ -32,6 +35,16 @@ function scripts() {
     .pipe(uglify())
     .pipe(dest("build/js"))
     .pipe(browserSync.stream())
+}
+
+function fonts () {
+  return src(['src/fonts/*.*'])
+    .pipe(fonter({
+      formats: ['woff', 'ttf']
+    }))
+    .pipe(src('src/fonts/*.ttf'))
+    .pipe(ttf2woff2())
+    .pipe(dest('build/fonts'))
 }
 
 function images() {
@@ -82,6 +95,7 @@ function cleanDist() {
 
 exports.html = html;
 exports.images = images;
+exports.fonts = fonts;
 exports.style = style;
 exports.scripts = scripts;
 exports.watching = watching;
