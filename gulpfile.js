@@ -1,4 +1,4 @@
-const {src, dest, watch, parallel, series} = require('gulp');
+const {src, dest, watch, parallel} = require('gulp');
 
 const sсss = require('gulp-sass')(require('sass'));
 const autoprefix = require('gulp-autoprefixer');
@@ -14,6 +14,7 @@ const svgSprite = require('gulp-svg-sprite');
 const ttf2woff2 = require('gulp-ttf2woff2');
 const fonter = require('gulp-fonter');
 const include = require('gulp-include');
+const plumber = require('gulp-plumber');
 
 function html() {
   return src('src/index.html')
@@ -31,7 +32,8 @@ function pages() {
 
 function style() {
   return src('src/style/style.scss')
-  .pipe(autoprefix({ overrideBrowweslist: ['last 10 version']}))
+    .pipe(plumber())
+    .pipe(autoprefix({ overrideBrowweslist: ['last 10 version']}))
     .pipe(concat('style.min.css'))
     .pipe(sсss({outputStyle: 'compressed'}))
     .pipe(dest('build/css'))
